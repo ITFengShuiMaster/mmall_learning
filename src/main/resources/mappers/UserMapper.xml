@@ -132,9 +132,7 @@
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null" >
         update_time = now(),
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -151,4 +149,55 @@
       update_time = now()
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <select id="checkUsername" resultType="int" parameterType="String">
+    select count(1) from mmall_user
+    where username=#{username};
+  </select>
+
+    <select id="checkEmail" resultType="int" parameterType="String">
+    select count(1) from mmall_user
+    where email=#{email};
+  </select>
+
+    <select id="selectUser" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from mmall_user
+        WHERE username=#{username} and password=#{pwd};
+    </select>
+
+    <select id="selectQuestionByUsername" resultType="String" parameterType="String">
+    select question
+    from mmall_user
+    where username=#{username};
+  </select>
+
+    <select id="checkQuestionAnswer" resultType="int" parameterType="map">
+    select count(1)
+    from mmall_user
+    where username=#{username}
+    and
+    question=#{question}
+    and
+    answer=#{answer};
+  </select>
+
+    <update id="updatePasswordByUsername" parameterType="map">
+    update mmall_user
+    set password=#{passwordNew}, update_time=now()
+    where username=#{username}
+  </update>
+
+    <select id="selectCountByPasswordAndUserId" resultType="int" parameterType="map">
+    select count(1) from mmall_user
+    where id=#{userId}
+    and password=#{password}
+  </select>
+
+    <select id="selectCountByEmailAndUserId" resultType="int" parameterType="map">
+    select count(1) from mmall_user
+    where email=#{email}
+    and id != #{userId};
+  </select>
 </mapper>
