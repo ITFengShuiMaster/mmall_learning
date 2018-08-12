@@ -42,10 +42,7 @@ public class UserController {
         if (response.isSuccess()) {
 //            session.setAttribute(Constants.CURRENT_USER, response.getData());
             CookieUtil.writeCookie(session.getId(), servletResponse);
-            CookieUtil.readCookie(request);
-            CookieUtil.delCookie(request, servletResponse);
             JedisPoolUtil.setEx(session.getId(), JsonUtil.objToJson(response.getData()), Constants.RedisExTime.EX_TIME);
-            int a = 1;
         }
         return response;
     }
@@ -95,8 +92,10 @@ public class UserController {
      *@author 卢越
      *@date 2018/7/30
      */
-    public ServerResponse<User> getUserInfo(HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<User> getUserInfo(HttpSession session, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+//        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorMessage("请登录");
         }

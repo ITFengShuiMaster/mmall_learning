@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class CookieUtil {
 
-    private static final String COOKIE_DOMAIN = "luyue.com";
+    private static final String COOKIE_DOMAIN = ".luyue.com";
     private static final String COOKIE_NAME = "mmall_login_token";
 
     public static void writeCookie(String token, HttpServletResponse response) {
@@ -23,6 +23,7 @@ public class CookieUtil {
         cookie.setPath("/");
         //如果设置-1 , 代表cookie 永久有效
         cookie.setMaxAge(60 * 60 * 24 * 365);
+        cookie.setHttpOnly(true);
 
         log.info("write cookie name:{} value:{}", cookie.getName(), cookie.getValue());
 
