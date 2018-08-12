@@ -16,6 +16,10 @@ public class Constants {
 
     public static final String USERNAME = "username";
 
+    public interface RedisExTime {
+        int EX_TIME = 60 * 20;
+    }
+
     public enum SALE_STATUS {
         /**
          * 商品状态：上架

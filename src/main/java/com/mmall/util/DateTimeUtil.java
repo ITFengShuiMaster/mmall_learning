@@ -12,7 +12,7 @@ import java.util.Date;
  * @date 2018/7/31 17:33
  **/
 public class DateTimeUtil {
-    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * 字符串时间转date

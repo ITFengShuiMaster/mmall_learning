@@ -3,8 +3,7 @@ package com.mmall.service.impl;
 import com.google.common.collect.Lists;
 import com.mmall.service.IFileService;
 import com.mmall.util.FTPUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,9 +16,8 @@ import java.util.UUID;
  * @date 2018/8/1 12:03
  **/
 @Service("iFileService")
+@Slf4j
 public class FileServiceImpl implements IFileService {
-
-    private static Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
 
     public static void main(String[] args) {
         File file = new File("E:\\JavaWeb_intelliJ IDEA文件\\mmall\\src\\main\\java\\com\\mmall\\service\\impl\\CategoryServiceImpl.java");
@@ -32,7 +30,7 @@ public class FileServiceImpl implements IFileService {
         String fileExpansionName = fileName.substring(fileName.lastIndexOf(".") + 1);
         String uploadFileName = UUID.randomUUID().toString() + "." + fileExpansionName;
 
-        logger.info("开始上传文件，上传文件名：{}, 上传文件的路径：{}, 新文件名：{}", fileName, fileExpansionName, path);
+        log.info("开始上传文件，上传文件名：{}, 上传文件的路径：{}, 新文件名：{}", fileName, fileExpansionName, path);
 
         File fileDir = new File(path);
         if (!fileDir.exists()) {
@@ -53,7 +51,7 @@ public class FileServiceImpl implements IFileService {
             //删除upload本地文件
             targetFile.delete();
         } catch (IOException e) {
-            logger.error("上传文件失败", e);
+            log.error("上传文件失败", e);
             return null;
         }
         return targetFile.getName();

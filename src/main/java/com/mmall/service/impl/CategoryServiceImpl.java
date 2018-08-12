@@ -6,6 +6,7 @@ import com.mmall.common.ServerResponse;
 import com.mmall.dao.CategoryMapper;
 import com.mmall.pojo.Category;
 import com.mmall.service.ICategoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -21,9 +22,8 @@ import java.util.Set;
  * @date 2018/7/31 10:50
  **/
 @Service("iCategoryService")
+@Slf4j
 public class CategoryServiceImpl implements ICategoryService {
-    private static Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
-
     @Autowired
     private CategoryMapper categoryMapper;
 
@@ -68,7 +68,7 @@ public class CategoryServiceImpl implements ICategoryService {
 
         List<Category> categories = categoryMapper.selectCategoryByParentId(categoryId);
         if (CollectionUtils.isEmpty(categories)) {
-            logger.warn(categoryId + "无子分类");
+            log.warn(categoryId + "无子分类");
         }
         return ServerResponse.createBySuccess(categories);
     }

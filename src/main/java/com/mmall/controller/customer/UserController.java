@@ -5,12 +5,17 @@ import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
+import com.mmall.util.CookieUtil;
+import com.mmall.util.JedisPoolUtil;
+import com.mmall.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -32,10 +37,15 @@ public class UserController {
      *@author 卢越
      *@date 2018/7/30
      */
-    public ServerResponse<User> login(String username, String password, HttpSession session) {
+    public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletRequest request, HttpServletResponse servletResponse) {
         ServerResponse<User> response = iUserService.login(username, password);
         if (response.isSuccess()) {
-            session.setAttribute(Constants.CURRENT_USER, response.getData());
+//            session.setAttribute(Constants.CURRENT_USER, response.getData());
+            CookieUtil.writeCookie(session.getId(), servletResponse);
+            CookieUtil.readCookie(request);
+            CookieUtil.delCookie(request, servletResponse);
+            JedisPoolUtil.setEx(session.getId(), JsonUtil.objToJson(response.getData()), Constants.RedisExTime.EX_TIME);
+            int a = 1;
         }
         return response;
     }

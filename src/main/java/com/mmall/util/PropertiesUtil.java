@@ -1,7 +1,6 @@
 package com.mmall.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,8 +9,9 @@ import java.util.Properties;
 /**
  * Created by geely
  */
+@Slf4j
+
 public class PropertiesUtil {
-    private static Logger logger = LoggerFactory.getLogger(PropertiesUtil.class);
 
     private static Properties prop;
 
@@ -22,7 +22,7 @@ public class PropertiesUtil {
             //加载Properties
             prop.load(new InputStreamReader(PropertiesUtil.class.getClassLoader().getResourceAsStream(fileName), "UTF-8"));
         } catch (IOException e) {
-            logger.error("初始化配置失败", e);
+            log.error("初始化配置失败", e);
         }
     }
 

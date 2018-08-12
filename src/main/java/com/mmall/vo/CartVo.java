@@ -1,5 +1,10 @@
 package com.mmall.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -7,6 +12,10 @@ import java.util.List;
  * @author Luyue
  * @date 2018/8/2 13:10
  **/
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CartVo {
 
     private List<CartProductVO> cartProductVOList;
@@ -18,31 +27,4 @@ public class CartVo {
         return cartProductVOList;
     }
 
-    public void setCartProductVOList(List<CartProductVO> cartProductVOList) {
-        this.cartProductVOList = cartProductVOList;
-    }
-
-    public BigDecimal getCartTotalPrice() {
-        return cartTotalPrice;
-    }
-
-    public void setCartTotalPrice(BigDecimal cartTotalPrice) {
-        this.cartTotalPrice = cartTotalPrice;
-    }
-
-    public Boolean getAllChecked() {
-        return allChecked;
-    }
-
-    public void setAllChecked(Boolean allChecked) {
-        this.allChecked = allChecked;
-    }
-
-    public String getImgHost() {
-        return imgHost;
-    }
-
-    public void setImgHost(String imgHost) {
-        this.imgHost = imgHost;
-    }
 }
