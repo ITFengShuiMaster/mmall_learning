@@ -37,7 +37,7 @@ public class UserController {
      *@author 卢越
      *@date 2018/7/30
      */
-    public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletRequest request, HttpServletResponse servletResponse) {
+    public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse servletResponse) {
         ServerResponse<User> response = iUserService.login(username, password);
         if (response.isSuccess()) {
 //            session.setAttribute(Constants.CURRENT_USER, response.getData());
@@ -55,8 +55,11 @@ public class UserController {
      *@author 卢越
      *@date 2018/7/30
      */
-    public ServerResponse<String> logout(HttpSession session) {
-        session.removeAttribute(Constants.CURRENT_USER);
+    public ServerResponse<String> logout(HttpServletRequest request, HttpServletResponse response) {
+        String token = CookieUtil.readCookie(request);
+        CookieUtil.delCookie(request, response);
+        JedisPoolUtil.del(token);
+//        session.removeAttribute(Constants.CURRENT_USER);
         return ServerResponse.createBySuccess();
     }
 
@@ -92,7 +95,7 @@ public class UserController {
      *@author 卢越
      *@date 2018/7/30
      */
-    public ServerResponse<User> getUserInfo(HttpSession session, HttpServletRequest request) {
+    public ServerResponse<User> getUserInfo(HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
 //        User user = (User) session.getAttribute(Constants.CURRENT_USER);
         User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
