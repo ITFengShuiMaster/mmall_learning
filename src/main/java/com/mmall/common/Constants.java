@@ -16,6 +16,8 @@ public class Constants {
 
     public static final String USERNAME = "username";
 
+    public static final String TOKEN_PREFIX = "token_";
+
     public interface RedisExTime {
         int EX_TIME = 60 * 20;
     }
