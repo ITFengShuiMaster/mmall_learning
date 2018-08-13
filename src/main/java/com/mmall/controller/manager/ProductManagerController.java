@@ -10,6 +10,9 @@ import com.mmall.pojo.User;
 import com.mmall.service.IFileService;
 import com.mmall.service.IProductService;
 import com.mmall.service.IUserService;
+import com.mmall.util.CookieUtil;
+import com.mmall.util.JedisPoolUtil;
+import com.mmall.util.JsonUtil;
 import com.mmall.util.PropertiesUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +56,9 @@ public class ProductManagerController {
      *@author 卢越
      *@date 2018/8/1
      */
-    public ServerResponse insertOrUpdateProduct(Product product, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse insertOrUpdateProduct(Product product, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
         }
@@ -74,8 +78,9 @@ public class ProductManagerController {
      *@author 卢越
      *@date 2018/8/1
      */
-    public ServerResponse updateProductStatus(Integer productId, Integer status, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse updateProductStatus(Integer productId, Integer status, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
         }
@@ -95,8 +100,9 @@ public class ProductManagerController {
      *@author 卢越
      *@date 2018/8/1
      */
-    public ServerResponse getProductDetail(Integer productId, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse getProductDetail(Integer productId, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
         }
@@ -116,8 +122,9 @@ public class ProductManagerController {
      *@author 卢越
      *@date 2018/8/1
      */
-    public ServerResponse<PageInfo> getProductList(@RequestParam(defaultValue = "1") int current, @RequestParam(defaultValue = "10") int size, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<PageInfo> getProductList(@RequestParam(defaultValue = "1") int current, @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
         }
@@ -138,8 +145,9 @@ public class ProductManagerController {
      *@author 卢越
      *@date 2018/8/1
      */
-    public ServerResponse<PageInfo> productSearch(String productName, Integer productId, @RequestParam(defaultValue = "1") int current, @RequestParam(defaultValue = "10") int size, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<PageInfo> productSearch(String productName, Integer productId, @RequestParam(defaultValue = "1") int current, @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
         }
@@ -160,8 +168,9 @@ public class ProductManagerController {
      *@author 卢越
      *@date 2018/8/1
      */
-    public ServerResponse upload(@RequestParam(value = "upload_file", required = false) MultipartFile file, HttpServletRequest request, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse upload(@RequestParam(value = "upload_file", required = false) MultipartFile file, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
         }
@@ -197,9 +206,10 @@ public class ProductManagerController {
      *@author 卢越
      *@date 2018/8/1
      */
-    public Map richTextImgUpload(@RequestParam(value = "upload_file", required = false) MultipartFile file, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+    public Map richTextImgUpload(@RequestParam(value = "upload_file", required = false) MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = Maps.newHashMap();
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             map.put("success", false);
             map.put("msg", "请先登录管理员");

@@ -5,6 +5,9 @@ import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.ICartService;
+import com.mmall.util.CookieUtil;
+import com.mmall.util.JedisPoolUtil;
+import com.mmall.util.JsonUtil;
 import com.mmall.vo.CartVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -29,8 +33,9 @@ public class CartController {
         this.iCartService = iCartService;
     }
 
-    public ServerResponse<CartVo> list(HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<CartVo> list(HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -40,8 +45,9 @@ public class CartController {
 
     @RequestMapping(value = "add.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<CartVo> add(Integer productId, Integer count, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<CartVo> add(Integer productId, Integer count, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -51,8 +57,9 @@ public class CartController {
 
     @RequestMapping(value = "update.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<CartVo> update(Integer productId, Integer count, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<CartVo> update(Integer productId, Integer count, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -62,8 +69,9 @@ public class CartController {
 
     @RequestMapping(value = "delete.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<CartVo> delete(String productIds, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<CartVo> delete(String productIds, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -73,8 +81,9 @@ public class CartController {
 
     @RequestMapping(value = "select_all.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<CartVo> selectAll(HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<CartVo> selectAll(HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -84,8 +93,9 @@ public class CartController {
 
     @RequestMapping(value = "unselect_all.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<CartVo> unSelectAll(HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<CartVo> unSelectAll(HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -95,8 +105,9 @@ public class CartController {
 
     @RequestMapping(value = "select.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<CartVo> select(Integer productId, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<CartVo> select(Integer productId, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -106,8 +117,9 @@ public class CartController {
 
     @RequestMapping(value = "unSelect.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<CartVo> unSelect(Integer productId, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<CartVo> unSelect(Integer productId, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -117,8 +129,9 @@ public class CartController {
 
     @RequestMapping(value = "get_cart_count.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<Integer> getCartCount(HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<Integer> getCartCount(HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }

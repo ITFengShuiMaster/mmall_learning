@@ -6,12 +6,16 @@ import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.IOrderService;
 import com.mmall.service.IUserService;
+import com.mmall.util.CookieUtil;
+import com.mmall.util.JedisPoolUtil;
+import com.mmall.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -33,8 +37,9 @@ public class OrderManagerController {
 
     @RequestMapping("list.do")
     @ResponseBody
-    public ServerResponse list(@RequestParam(value = "current", defaultValue = "1") Integer current, @RequestParam(value = "size", defaultValue = "10") Integer size, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse list(@RequestParam(value = "current", defaultValue = "1") Integer current, @RequestParam(value = "size", defaultValue = "10") Integer size, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
         }
@@ -49,8 +54,9 @@ public class OrderManagerController {
 
     @RequestMapping("detail.do")
     @ResponseBody
-    public ServerResponse detail(Long orderNo, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse detail(Long orderNo, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
         }
@@ -65,8 +71,9 @@ public class OrderManagerController {
 
     @RequestMapping("search.do")
     @ResponseBody
-    public ServerResponse search(Long orderNo, @RequestParam(value = "current", defaultValue = "1") Integer current, @RequestParam(value = "size", defaultValue = "10") Integer size, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse search(Long orderNo, @RequestParam(value = "current", defaultValue = "1") Integer current, @RequestParam(value = "size", defaultValue = "10") Integer size, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
         }
@@ -81,8 +88,9 @@ public class OrderManagerController {
 
     @RequestMapping("sendOrder.do")
     @ResponseBody
-    public ServerResponse sendOrder(Long orderNo, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse sendOrder(Long orderNo, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
         }

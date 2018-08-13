@@ -10,6 +10,9 @@ import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.IOrderService;
+import com.mmall.util.CookieUtil;
+import com.mmall.util.JedisPoolUtil;
+import com.mmall.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +51,9 @@ public class OrderController {
      *@author 卢越
      *@date 2018/8/5
      */
-    public ServerResponse create(Integer shippingId, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse create(Integer shippingId, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -65,8 +69,9 @@ public class OrderController {
      *@author 卢越
      *@date 2018/8/5
      */
-    public ServerResponse cancel(Long orderNo, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse cancel(Long orderNo, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -82,8 +87,9 @@ public class OrderController {
      *@author 卢越
      *@date 2018/8/5
      */
-    public ServerResponse getCartProduct(HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse getCartProduct(HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -99,8 +105,9 @@ public class OrderController {
      *@author 卢越
      *@date 2018/8/5
      */
-    public ServerResponse detail(Long orderNo, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse detail(Long orderNo, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -110,8 +117,9 @@ public class OrderController {
 
     @RequestMapping("list.do")
     @ResponseBody
-    public ServerResponse<PageInfo> list(@RequestParam(value = "current", defaultValue = "1") Integer current, @RequestParam(value = "size", defaultValue = "10") Integer size, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<PageInfo> list(@RequestParam(value = "current", defaultValue = "1") Integer current, @RequestParam(value = "size", defaultValue = "10") Integer size, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -122,8 +130,9 @@ public class OrderController {
 
     @RequestMapping(value = "pay.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse pay(Long orderNo, HttpServletRequest request, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse pay(Long orderNo, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -172,8 +181,9 @@ public class OrderController {
 
     @RequestMapping(value = "query_order_pay_status.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<Boolean> queryOrderPayStatus(Long orderNo, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<Boolean> queryOrderPayStatus(Long orderNo, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }

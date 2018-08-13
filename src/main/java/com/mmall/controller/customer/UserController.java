@@ -40,7 +40,6 @@ public class UserController {
     public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse servletResponse) {
         ServerResponse<User> response = iUserService.login(username, password);
         if (response.isSuccess()) {
-//            session.setAttribute(Constants.CURRENT_USER, response.getData());
             CookieUtil.writeCookie(session.getId(), servletResponse);
             JedisPoolUtil.setEx(session.getId(), JsonUtil.objToJson(response.getData()), Constants.RedisExTime.EX_TIME);
         }
@@ -97,7 +96,6 @@ public class UserController {
      */
     public ServerResponse<User> getUserInfo(HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-//        User user = (User) session.getAttribute(Constants.CURRENT_USER);
         User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorMessage("请登录");
@@ -150,8 +148,9 @@ public class UserController {
      *@author 卢越
      *@date 2018/7/30
      */
-    public ServerResponse<String> resetPassword(String passwordOld, String passwordNew, HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<String> resetPassword(String passwordOld, String passwordNew, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorMessage("用户未登录");
         }
@@ -167,8 +166,9 @@ public class UserController {
      *@author 卢越
      *@date 2018/7/30
      */
-    public ServerResponse<User> updateUser(User user, HttpSession session) {
-        User currentUser = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<User> updateUser(User user, HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User currentUser = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
         if (currentUser == null) {
             return ServerResponse.createByErrorMessage("用户未登录");
         }
@@ -179,7 +179,7 @@ public class UserController {
 
         ServerResponse<User> response = iUserService.updateUser(user);
         if (response.isSuccess()) {
-            session.setAttribute(Constants.CURRENT_USER, response.getData());
+            JedisPoolUtil.set(token, JsonUtil.objToJson(response.getData()));
             return response;
         }
         return response;
@@ -193,8 +193,10 @@ public class UserController {
      *@author 卢越
      *@date 2018/7/30
      */
-    public ServerResponse<User> getInformation(HttpSession session) {
-        User currentUser = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<User> getInformation(HttpServletRequest request) {
+        String token = CookieUtil.readCookie(request);
+        User currentUser = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "用户需要登录 status=10");
         }
