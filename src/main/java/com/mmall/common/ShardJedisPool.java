@@ -1,18 +1,28 @@
 package com.mmall.common;
 
+import com.google.common.collect.Lists;
 import com.mmall.util.PropertiesUtil;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.JedisShardInfo;
+import redis.clients.jedis.ShardedJedis;
+import redis.clients.jedis.ShardedJedisPool;
+import redis.clients.util.Hashing;
+import redis.clients.util.Sharded;
+
+import java.util.List;
 
 /**
  * @author Luyue
- * @date 2018/8/11 14:29
+ * @date 2018/8/14 9:29
  **/
-public class JedisPool {
-    private static redis.clients.jedis.JedisPool pool;
+public class ShardJedisPool {
+    private static ShardedJedisPool pool;
 
-    private static String ip = PropertiesUtil.getKey("redis2.ip");
-    private static Integer port = Integer.parseInt(PropertiesUtil.getKey("redis2.port", "6379"));
+    private static String ip1 = PropertiesUtil.getKey("redis1.ip");
+    private static Integer port1 = Integer.parseInt(PropertiesUtil.getKey("redis1.port", "6379"));
+
+    private static String ip2 = PropertiesUtil.getKey("redis2.ip");
+    private static Integer port2 = Integer.parseInt(PropertiesUtil.getKey("redis2.port", "6380"));
 
     private static Integer maxTotal = Integer.parseInt(PropertiesUtil.getKey("redis.max.total", "20"));
     private static Integer maxIdle = Integer.parseInt(PropertiesUtil.getKey("redis.max.idle", "10"));
@@ -33,31 +43,38 @@ public class JedisPool {
         //当连接池无空闲连接时，是否阻塞
         jedisPoolConfig.setBlockWhenExhausted(true);
 
-        pool = new redis.clients.jedis.JedisPool(jedisPoolConfig, ip, port, 1000*2);
+        JedisShardInfo info1 = new JedisShardInfo(ip1, port1, 1000 * 20);
+        JedisShardInfo info2 = new JedisShardInfo(ip2, port2, 1000 * 20);
+
+        List<JedisShardInfo> infoList = Lists.newArrayList(info1, info2);
+
+        pool = new ShardedJedisPool(jedisPoolConfig, infoList, Hashing.MURMUR_HASH, Sharded.DEFAULT_KEY_TAG_PATTERN);
     }
 
     static {
         initPool();
     }
 
-    public static Jedis getJedis() {
+    public static ShardedJedis getJedis() {
         return pool.getResource();
     }
 
-    public static void returnBrokenJedis(Jedis jedis) {
+    public static void returnBrokenJedis(ShardedJedis jedis) {
         pool.returnBrokenResource(jedis);
     }
 
-    public static void returnJedis(Jedis jedis) {
+    public static void returnJedis(ShardedJedis jedis) {
         pool.returnResource(jedis);
     }
 
     public static void main(String[] args) {
-        Jedis jedis = getJedis();
-        jedis.set("luyue", "luyue");
-        returnJedis(jedis);
+        ShardedJedis jedis = getJedis();
 
-        pool.destroy();
+        for(int i = 0 ; i < 10 ; i ++) {
+            jedis.set("key"+i, "value"+i);
+        }
+
+        returnJedis(jedis);
         System.out.println("down*************************");
     }
 }

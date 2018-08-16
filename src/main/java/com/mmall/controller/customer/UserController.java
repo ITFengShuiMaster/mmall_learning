@@ -6,7 +6,7 @@ import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
 import com.mmall.util.CookieUtil;
-import com.mmall.util.JedisPoolUtil;
+import com.mmall.util.ShardedJedisPoolUtil;
 import com.mmall.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,8 +40,10 @@ public class UserController {
     public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse servletResponse) {
         ServerResponse<User> response = iUserService.login(username, password);
         if (response.isSuccess()) {
+            //Redis的key值存储在cookie中，这样每次判断用户是否登录只需要从cookie中获取key值，在从Redis取得user就行
             CookieUtil.writeCookie(session.getId(), servletResponse);
-            JedisPoolUtil.setEx(session.getId(), JsonUtil.objToJson(response.getData()), Constants.RedisExTime.EX_TIME);
+            //将登录用户的信息存储到Redis中
+            ShardedJedisPoolUtil.setEx(session.getId(), JsonUtil.objToJson(response.getData()), Constants.RedisExTime.EX_TIME);
         }
         return response;
     }
@@ -57,7 +59,7 @@ public class UserController {
     public ServerResponse<String> logout(HttpServletRequest request, HttpServletResponse response) {
         String token = CookieUtil.readCookie(request);
         CookieUtil.delCookie(request, response);
-        JedisPoolUtil.del(token);
+        ShardedJedisPoolUtil.del(token);
 //        session.removeAttribute(Constants.CURRENT_USER);
         return ServerResponse.createBySuccess();
     }
@@ -96,7 +98,7 @@ public class UserController {
      */
     public ServerResponse<User> getUserInfo(HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorMessage("请登录");
         }
@@ -150,7 +152,7 @@ public class UserController {
      */
     public ServerResponse<String> resetPassword(String passwordOld, String passwordNew, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorMessage("用户未登录");
         }
@@ -168,7 +170,7 @@ public class UserController {
      */
     public ServerResponse<User> updateUser(User user, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User currentUser = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User currentUser = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (currentUser == null) {
             return ServerResponse.createByErrorMessage("用户未登录");
         }
@@ -179,7 +181,7 @@ public class UserController {
 
         ServerResponse<User> response = iUserService.updateUser(user);
         if (response.isSuccess()) {
-            JedisPoolUtil.set(token, JsonUtil.objToJson(response.getData()));
+            ShardedJedisPoolUtil.set(token, JsonUtil.objToJson(response.getData()));
             return response;
         }
         return response;
@@ -195,7 +197,7 @@ public class UserController {
      */
     public ServerResponse<User> getInformation(HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User currentUser = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User currentUser = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
 
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "用户需要登录 status=10");

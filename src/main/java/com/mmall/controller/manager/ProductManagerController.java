@@ -2,7 +2,6 @@ package com.mmall.controller.manager;
 
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
-import com.mmall.common.Constants;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.Product;
@@ -11,7 +10,7 @@ import com.mmall.service.IFileService;
 import com.mmall.service.IProductService;
 import com.mmall.service.IUserService;
 import com.mmall.util.CookieUtil;
-import com.mmall.util.JedisPoolUtil;
+import com.mmall.util.ShardedJedisPoolUtil;
 import com.mmall.util.JsonUtil;
 import com.mmall.util.PropertiesUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -58,7 +56,7 @@ public class ProductManagerController {
      */
     public ServerResponse insertOrUpdateProduct(Product product, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
         }
@@ -80,7 +78,7 @@ public class ProductManagerController {
      */
     public ServerResponse updateProductStatus(Integer productId, Integer status, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
         }
@@ -102,7 +100,7 @@ public class ProductManagerController {
      */
     public ServerResponse getProductDetail(Integer productId, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
         }
@@ -124,7 +122,7 @@ public class ProductManagerController {
      */
     public ServerResponse<PageInfo> getProductList(@RequestParam(defaultValue = "1") int current, @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
         }
@@ -147,7 +145,7 @@ public class ProductManagerController {
      */
     public ServerResponse<PageInfo> productSearch(String productName, Integer productId, @RequestParam(defaultValue = "1") int current, @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
         }
@@ -170,7 +168,7 @@ public class ProductManagerController {
      */
     public ServerResponse upload(@RequestParam(value = "upload_file", required = false) MultipartFile file, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
         }
@@ -209,7 +207,7 @@ public class ProductManagerController {
     public Map richTextImgUpload(@RequestParam(value = "upload_file", required = false) MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = Maps.newHashMap();
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             map.put("success", false);
             map.put("msg", "请先登录管理员");

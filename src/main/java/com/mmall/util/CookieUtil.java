@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class CookieUtil {
 
+    /**
+     *tomcat 8.5的用法，tomcat8.5以下：.luyue.com
+     */
     private static final String COOKIE_DOMAIN = "luyue.com";
     private static final String COOKIE_NAME = "mmall_login_token";
 

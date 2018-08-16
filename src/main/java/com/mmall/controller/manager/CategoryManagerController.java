@@ -1,13 +1,12 @@
 package com.mmall.controller.manager;
 
-import com.mmall.common.Constants;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.ICategoryService;
 import com.mmall.service.IUserService;
 import com.mmall.util.CookieUtil;
-import com.mmall.util.JedisPoolUtil;
+import com.mmall.util.ShardedJedisPoolUtil;
 import com.mmall.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * @author Luyue
@@ -46,7 +44,7 @@ public class CategoryManagerController {
      */
     public ServerResponse addCategory(String categoryName, @RequestParam(value = "parentId", defaultValue = "0") Integer parentId, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
         }
@@ -69,7 +67,7 @@ public class CategoryManagerController {
      */
     public ServerResponse updateCategoryName(String categoryName, Integer categoryId, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
         }
@@ -92,7 +90,7 @@ public class CategoryManagerController {
      */
     public ServerResponse getParallelCategory(Integer categoryId, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
         }
@@ -115,7 +113,7 @@ public class CategoryManagerController {
      */
     public ServerResponse getDeeplCategory(Integer categoryId, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
         }

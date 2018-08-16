@@ -5,7 +5,7 @@ import com.mmall.common.ServerResponse;
 import com.mmall.dao.UserMapper;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
-import com.mmall.util.JedisPoolUtil;
+import com.mmall.util.ShardedJedisPoolUtil;
 import com.mmall.util.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +98,7 @@ public class UserServiceImpl implements IUserService {
     public ServerResponse<String> checkQuestionAnswer(String username, String question, String answer) {
         if (userMapper.checkQuestionAnswer(username, question, answer) > 0) {
             String forgetToken = UUID.randomUUID().toString();
-            JedisPoolUtil.setEx(Constants.TOKEN_PREFIX + username, forgetToken, 60 * 60 * 12);
+            ShardedJedisPoolUtil.setEx(Constants.TOKEN_PREFIX + username, forgetToken, 60 * 60 * 12);
             return ServerResponse.createBySuccess(forgetToken);
         }
         return ServerResponse.createByErrorMessage("问题答案不正确");
@@ -114,7 +114,7 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMessage("用户不存在");
         }
 
-        String token = JedisPoolUtil.get(Constants.TOKEN_PREFIX + username);
+        String token = ShardedJedisPoolUtil.get(Constants.TOKEN_PREFIX + username);
         if (StringUtils.isBlank(token)) {
             return ServerResponse.createByErrorMessage("token无效或过期");
         }

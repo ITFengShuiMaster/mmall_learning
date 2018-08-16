@@ -6,7 +6,7 @@ import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.ICartService;
 import com.mmall.util.CookieUtil;
-import com.mmall.util.JedisPoolUtil;
+import com.mmall.util.ShardedJedisPoolUtil;
 import com.mmall.util.JsonUtil;
 import com.mmall.vo.CartVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * @author Luyue
@@ -35,7 +34,7 @@ public class CartController {
 
     public ServerResponse<CartVo> list(HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -47,7 +46,7 @@ public class CartController {
     @ResponseBody
     public ServerResponse<CartVo> add(Integer productId, Integer count, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -59,7 +58,7 @@ public class CartController {
     @ResponseBody
     public ServerResponse<CartVo> update(Integer productId, Integer count, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -71,7 +70,7 @@ public class CartController {
     @ResponseBody
     public ServerResponse<CartVo> delete(String productIds, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -83,7 +82,7 @@ public class CartController {
     @ResponseBody
     public ServerResponse<CartVo> selectAll(HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -95,7 +94,7 @@ public class CartController {
     @ResponseBody
     public ServerResponse<CartVo> unSelectAll(HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -107,7 +106,7 @@ public class CartController {
     @ResponseBody
     public ServerResponse<CartVo> select(Integer productId, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -119,7 +118,7 @@ public class CartController {
     @ResponseBody
     public ServerResponse<CartVo> unSelect(Integer productId, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -131,7 +130,7 @@ public class CartController {
     @ResponseBody
     public ServerResponse<Integer> getCartCount(HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }

@@ -3,7 +3,7 @@ package com.mmall.controller.common;
 import com.mmall.common.Constants;
 import com.mmall.pojo.User;
 import com.mmall.util.CookieUtil;
-import com.mmall.util.JedisPoolUtil;
+import com.mmall.util.ShardedJedisPoolUtil;
 import com.mmall.util.JsonUtil;
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,9 +26,9 @@ public class SessionExFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String token = CookieUtil.readCookie(request);
         if (StringUtils.isNotEmpty(token)) {
-            User user = JsonUtil.json2Object(JedisPoolUtil.get(token), User.class);
+            User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
             if (user != null) {
-                JedisPoolUtil.expire(token, Constants.RedisExTime.EX_TIME);
+                ShardedJedisPoolUtil.expire(token, Constants.RedisExTime.EX_TIME);
             }
         }
         filterChain.doFilter(servletRequest, servletResponse);
