@@ -170,7 +170,7 @@
         and order_no=#{orderNo}
     </select>
 
-    <select id="selectListByOrderNo" resultMap="BaseResultMap" parameterType="int">
+    <select id="selectListByOrderNo" resultMap="BaseResultMap" parameterType="long">
         SELECT
         <include refid="Base_Column_List"/>
         from mmall_order_item

@@ -55,17 +55,20 @@ public class ProductManagerController {
      *@date 2018/8/1
      */
     public ServerResponse insertOrUpdateProduct(Product product, HttpServletRequest request) {
-        String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
-        if (user == null) {
-            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
-        }
+//        String token = CookieUtil.readCookie(request);
+//        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
+//        if (user == null) {
+//            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
+//        }
+//
+//        if (iUserService.checkAdminValid(user).isSuccess()) {
+//            return iProductService.saveOrUpdateProduct(product);
+//        }
+//
+//        return ServerResponse.createByErrorMessage("用户权限不足");
 
-        if (iUserService.checkAdminValid(user).isSuccess()) {
-            return iProductService.saveOrUpdateProduct(product);
-        }
-
-        return ServerResponse.createByErrorMessage("用户权限不足");
+        //改造成通过拦截器验证用户是否登录并权限判断
+        return iProductService.saveOrUpdateProduct(product);
     }
 
     @RequestMapping(value = "set_sale_status.do", method = RequestMethod.GET)
@@ -77,17 +80,19 @@ public class ProductManagerController {
      *@date 2018/8/1
      */
     public ServerResponse updateProductStatus(Integer productId, Integer status, HttpServletRequest request) {
-        String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
-        if (user == null) {
-            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
-        }
-
-        if (iUserService.checkAdminValid(user).isSuccess()) {
-            return iProductService.setSaleStatus(productId, status);
-        }
-
-        return ServerResponse.createByErrorMessage("用户权限不足");
+//        String token = CookieUtil.readCookie(request);
+//        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
+//        if (user == null) {
+//            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
+//        }
+//
+//        if (iUserService.checkAdminValid(user).isSuccess()) {
+//            return iProductService.setSaleStatus(productId, status);
+//        }
+//
+//        return ServerResponse.createByErrorMessage("用户权限不足");
+        //改造成通过拦截器验证用户是否登录并权限判断
+        return iProductService.setSaleStatus(productId, status);
     }
 
     @RequestMapping(value = "detail.do", method = RequestMethod.GET)
@@ -99,17 +104,19 @@ public class ProductManagerController {
      *@date 2018/8/1
      */
     public ServerResponse getProductDetail(Integer productId, HttpServletRequest request) {
-        String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
-        if (user == null) {
-            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
-        }
-
-        if (iUserService.checkAdminValid(user).isSuccess()) {
-            return iProductService.getManagerProductDetail(productId);
-        }
-
-        return ServerResponse.createByErrorMessage("用户权限不足");
+//        String token = CookieUtil.readCookie(request);
+//        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
+//        if (user == null) {
+//            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
+//        }
+//
+//        if (iUserService.checkAdminValid(user).isSuccess()) {
+//            return iProductService.getManagerProductDetail(productId);
+//        }
+//
+//        return ServerResponse.createByErrorMessage("用户权限不足");
+        //改造成通过拦截器验证用户是否登录并权限判断
+        return iProductService.getManagerProductDetail(productId);
     }
 
     @RequestMapping(value = "list.do", method = RequestMethod.GET)
@@ -121,18 +128,20 @@ public class ProductManagerController {
      *@date 2018/8/1
      */
     public ServerResponse<PageInfo> getProductList(@RequestParam(defaultValue = "1") int current, @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
-        String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
-        if (user == null) {
-            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
-        }
-
-        if (iUserService.checkAdminValid(user).isSuccess()) {
-            //执行分页查询
-            return iProductService.getManageProductList(current, size);
-        }
-
-        return ServerResponse.createByErrorMessage("用户权限不足");
+//        String token = CookieUtil.readCookie(request);
+//        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
+//        if (user == null) {
+//            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
+//        }
+//
+//        if (iUserService.checkAdminValid(user).isSuccess()) {
+//            //执行分页查询
+//            return iProductService.getManageProductList(current, size);
+//        }
+//
+//        return ServerResponse.createByErrorMessage("用户权限不足");
+        //改造成通过拦截器验证用户是否登录并权限判断
+        return iProductService.getManageProductList(current, size);
     }
 
     @RequestMapping(value = "search.do", method = RequestMethod.GET)
@@ -144,18 +153,20 @@ public class ProductManagerController {
      *@date 2018/8/1
      */
     public ServerResponse<PageInfo> productSearch(String productName, Integer productId, @RequestParam(defaultValue = "1") int current, @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
-        String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
-        if (user == null) {
-            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
-        }
-
-        if (iUserService.checkAdminValid(user).isSuccess()) {
-            //执行业务
-            return iProductService.productSearch(productName, productId, current, size);
-        }
-
-        return ServerResponse.createByErrorMessage("用户权限不足");
+//        String token = CookieUtil.readCookie(request);
+//        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
+//        if (user == null) {
+//            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
+//        }
+//
+//        if (iUserService.checkAdminValid(user).isSuccess()) {
+//            //执行业务
+//            return iProductService.productSearch(productName, productId, current, size);
+//        }
+//
+//        return ServerResponse.createByErrorMessage("用户权限不足");
+        //改造成通过拦截器验证用户是否登录并权限判断
+        return iProductService.productSearch(productName, productId, current, size);
     }
 
     @RequestMapping(value = "upload.do", method = RequestMethod.POST)
@@ -167,26 +178,37 @@ public class ProductManagerController {
      *@date 2018/8/1
      */
     public ServerResponse upload(@RequestParam(value = "upload_file", required = false) MultipartFile file, HttpServletRequest request) {
-        String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
-        if (user == null) {
-            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
-        }
+//        String token = CookieUtil.readCookie(request);
+//        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
+//        if (user == null) {
+//            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
+//        }
+//
+//        if (iUserService.checkAdminValid(user).isSuccess()) {
+//            String path = request.getSession().getServletContext().getRealPath("upload");
+//            //执行业务
+//            String targetFileName = iFileService.upload(file, path);
+//            String url = PropertiesUtil.getKey("ftp.server.http.prefix") + targetFileName;
+//
+//            Map<String, String> map = Maps.newHashMap();
+//            map.put("uri", targetFileName);
+//            map.put("url", url);
+//
+//            return ServerResponse.createBySuccess(map);
+//        }
+//
+//        return ServerResponse.createByErrorMessage("用户权限不足");
+        //改造成通过拦截器验证用户是否登录并权限判断
+        String path = request.getSession().getServletContext().getRealPath("upload");
+        //执行业务
+        String targetFileName = iFileService.upload(file, path);
+        String url = PropertiesUtil.getKey("ftp.server.http.prefix") + targetFileName;
 
-        if (iUserService.checkAdminValid(user).isSuccess()) {
-            String path = request.getSession().getServletContext().getRealPath("upload");
-            //执行业务
-            String targetFileName = iFileService.upload(file, path);
-            String url = PropertiesUtil.getKey("ftp.server.http.prefix") + targetFileName;
+        Map<String, String> map = Maps.newHashMap();
+        map.put("uri", targetFileName);
+        map.put("url", url);
 
-            Map<String, String> map = Maps.newHashMap();
-            map.put("uri", targetFileName);
-            map.put("url", url);
-
-            return ServerResponse.createBySuccess(map);
-        }
-
-        return ServerResponse.createByErrorMessage("用户权限不足");
+        return ServerResponse.createBySuccess(map);
     }
 
 
@@ -206,32 +228,46 @@ public class ProductManagerController {
      */
     public Map richTextImgUpload(@RequestParam(value = "upload_file", required = false) MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = Maps.newHashMap();
-        String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
-        if (user == null) {
+//        String token = CookieUtil.readCookie(request);
+//        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
+//        if (user == null) {
+//            map.put("success", false);
+//            map.put("msg", "请先登录管理员");
+//            return map;
+//        }
+//
+//        if (iUserService.checkAdminValid(user).isSuccess()) {
+//            String path = request.getSession().getServletContext().getRealPath("upload");
+//            String targetFileName = iFileService.upload(file, path);
+//            if (StringUtils.isBlank(targetFileName)) {
+//                map.put("success", false);
+//                map.put("msg", "上传失败");
+//                return map;
+//            }
+//            String url = PropertiesUtil.getKey("ftp.server.http.prefix") + targetFileName;
+//            map.put("success", true);
+//            map.put("msg", "上传成功");
+//            map.put("file_path", url);
+//            response.addHeader("Access-Control-Allow-Headers", "X-File-Name");
+//            return map;
+//        }
+//
+//        map.put("success", false);
+//        map.put("msg", "无权限操作");
+//        return map;
+        //改造成通过拦截器验证用户是否登录并权限判断
+        String path = request.getSession().getServletContext().getRealPath("upload");
+        String targetFileName = iFileService.upload(file, path);
+        if (StringUtils.isBlank(targetFileName)) {
             map.put("success", false);
-            map.put("msg", "请先登录管理员");
+            map.put("msg", "上传失败");
             return map;
         }
-
-        if (iUserService.checkAdminValid(user).isSuccess()) {
-            String path = request.getSession().getServletContext().getRealPath("upload");
-            String targetFileName = iFileService.upload(file, path);
-            if (StringUtils.isBlank(targetFileName)) {
-                map.put("success", false);
-                map.put("msg", "上传失败");
-                return map;
-            }
-            String url = PropertiesUtil.getKey("ftp.server.http.prefix") + targetFileName;
-            map.put("success", true);
-            map.put("msg", "上传成功");
-            map.put("file_path", url);
-            response.addHeader("Access-Control-Allow-Headers", "X-File-Name");
-            return map;
-        }
-
-        map.put("success", false);
-        map.put("msg", "无权限操作");
+        String url = PropertiesUtil.getKey("ftp.server.http.prefix") + targetFileName;
+        map.put("success", true);
+        map.put("msg", "上传成功");
+        map.put("file_path", url);
+        response.addHeader("Access-Control-Allow-Headers", "X-File-Name");
         return map;
     }
 }

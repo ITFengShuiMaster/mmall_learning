@@ -36,68 +36,76 @@ public class OrderManagerController {
     @RequestMapping("list.do")
     @ResponseBody
     public ServerResponse list(@RequestParam(value = "current", defaultValue = "1") Integer current, @RequestParam(value = "size", defaultValue = "10") Integer size, HttpServletRequest request) {
-        String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
-        if (user == null) {
-            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
-        }
+//        String token = CookieUtil.readCookie(request);
+//        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
+//        if (user == null) {
+//            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
+//        }
 
-        if (iUserService.checkAdminValid(user).isSuccess()) {
+//        if (iUserService.checkAdminValid(user).isSuccess()) {
             //业务
-            return iOrderService.manageList(current, size);
-        }
+//            return iOrderService.manageList(current, size);
+//        }
 
-        return ServerResponse.createByErrorMessage("无权限操作");
+//        return ServerResponse.createByErrorMessage("无权限操作");
+        //改造成通过拦截器验证用户是否登录并权限判断
+        return iOrderService.manageList(current, size);
     }
 
     @RequestMapping("detail.do")
     @ResponseBody
     public ServerResponse detail(Long orderNo, HttpServletRequest request) {
-        String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
-        if (user == null) {
-            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
-        }
-
-        if (iUserService.checkAdminValid(user).isSuccess()) {
-            //业务
-            return iOrderService.manageDetail(orderNo);
-        }
-
-        return ServerResponse.createByErrorMessage("无权限操作");
+//        String token = CookieUtil.readCookie(request);
+//        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
+//        if (user == null) {
+//            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
+//        }
+//
+//        if (iUserService.checkAdminValid(user).isSuccess()) {
+//            //业务
+//            return iOrderService.manageDetail(orderNo);
+//        }
+//
+//        return ServerResponse.createByErrorMessage("无权限操作");
+        //改造成通过拦截器验证用户是否登录并权限判断
+        return iOrderService.manageDetail(orderNo);
     }
 
     @RequestMapping("search.do")
     @ResponseBody
     public ServerResponse search(Long orderNo, @RequestParam(value = "current", defaultValue = "1") Integer current, @RequestParam(value = "size", defaultValue = "10") Integer size, HttpServletRequest request) {
-        String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
-        if (user == null) {
-            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
-        }
-
-        if (iUserService.checkAdminValid(user).isSuccess()) {
-            //业务
-            return iOrderService.search(orderNo, current, size);
-        }
-
-        return ServerResponse.createByErrorMessage("无权限操作");
+//        String token = CookieUtil.readCookie(request);
+//        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
+//        if (user == null) {
+//            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
+//        }
+//
+//        if (iUserService.checkAdminValid(user).isSuccess()) {
+//            //业务
+//            return iOrderService.search(orderNo, current, size);
+//        }
+//
+//        return ServerResponse.createByErrorMessage("无权限操作");
+        //改造成通过拦截器验证用户是否登录并权限判断
+        return iOrderService.search(orderNo, current, size);
     }
 
     @RequestMapping("sendOrder.do")
     @ResponseBody
     public ServerResponse sendOrder(Long orderNo, HttpServletRequest request) {
-        String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
-        if (user == null) {
-            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
-        }
-
-        if (iUserService.checkAdminValid(user).isSuccess()) {
-            //业务
-            return iOrderService.send(orderNo);
-        }
-
-        return ServerResponse.createByErrorMessage("无权限操作");
+//        String token = CookieUtil.readCookie(request);
+//        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
+//        if (user == null) {
+//            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
+//        }
+//
+//        if (iUserService.checkAdminValid(user).isSuccess()) {
+//            //业务
+//            return iOrderService.send(orderNo);
+//        }
+//
+//        return ServerResponse.createByErrorMessage("无权限操作");
+        //改造成通过拦截器验证用户是否登录并权限判断
+        return iOrderService.send(orderNo);
     }
 }

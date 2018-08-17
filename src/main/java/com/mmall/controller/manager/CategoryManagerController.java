@@ -43,18 +43,20 @@ public class CategoryManagerController {
      *@date 2018/7/31
      */
     public ServerResponse addCategory(String categoryName, @RequestParam(value = "parentId", defaultValue = "0") Integer parentId, HttpServletRequest request) {
-        String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
-        if (user == null) {
-            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
-        }
-
-        if (iUserService.checkAdminValid(user).isSuccess()) {
-            //添加商品分类
-            return iCategoryService.addCategory(categoryName, parentId);
-        }
-
-        return ServerResponse.createByErrorMessage("无权限操作");
+//        String token = CookieUtil.readCookie(request);
+//        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
+//        if (user == null) {
+//            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
+//        }
+//
+//        if (iUserService.checkAdminValid(user).isSuccess()) {
+//            //添加商品分类
+//            return iCategoryService.addCategory(categoryName, parentId);
+//        }
+//
+//        return ServerResponse.createByErrorMessage("无权限操作");
+        //改造成通过拦截器验证用户是否登录并权限判断
+        return iCategoryService.addCategory(categoryName, parentId);
     }
 
     @RequestMapping(value = "update_category_name.do", method = RequestMethod.POST)
@@ -66,18 +68,20 @@ public class CategoryManagerController {
      *@date 2018/7/31
      */
     public ServerResponse updateCategoryName(String categoryName, Integer categoryId, HttpServletRequest request) {
-        String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
-        if (user == null) {
-            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
-        }
-
-        if (iUserService.checkAdminValid(user).isSuccess()) {
-            //更新商品名称
-            return iCategoryService.updateCategoryName(categoryName, categoryId);
-        }
-
-        return ServerResponse.createByErrorMessage("无权限操作");
+//        String token = CookieUtil.readCookie(request);
+//        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
+//        if (user == null) {
+//            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
+//        }
+//
+//        if (iUserService.checkAdminValid(user).isSuccess()) {
+//            //更新商品名称
+//            return iCategoryService.updateCategoryName(categoryName, categoryId);
+//        }
+//
+//        return ServerResponse.createByErrorMessage("无权限操作");
+        //改造成通过拦截器验证用户是否登录并权限判断
+        return iCategoryService.updateCategoryName(categoryName, categoryId);
     }
 
     @RequestMapping(value = "get_category.do", method = RequestMethod.POST)
@@ -89,18 +93,20 @@ public class CategoryManagerController {
      *@date 2018/8/1
      */
     public ServerResponse getParallelCategory(Integer categoryId, HttpServletRequest request) {
-        String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
-        if (user == null) {
-            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
-        }
-
-        if (iUserService.checkAdminValid(user).isSuccess()) {
-            //获取子节点平级category
-            return iCategoryService.getParallelCategory(categoryId);
-        }
-
-        return ServerResponse.createByErrorMessage("无权限操作");
+//        String token = CookieUtil.readCookie(request);
+//        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
+//        if (user == null) {
+//            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
+//        }
+//
+//        if (iUserService.checkAdminValid(user).isSuccess()) {
+//            //获取子节点平级category
+//            return iCategoryService.getParallelCategory(categoryId);
+//        }
+//
+//        return ServerResponse.createByErrorMessage("无权限操作");
+        //改造成通过拦截器验证用户是否登录并权限判断
+        return iCategoryService.getParallelCategory(categoryId);
     }
 
     @RequestMapping(value = "get_deep_category.do", method = RequestMethod.POST)
@@ -112,17 +118,19 @@ public class CategoryManagerController {
      *@date 2018/8/1
      */
     public ServerResponse getDeeplCategory(Integer categoryId, HttpServletRequest request) {
-        String token = CookieUtil.readCookie(request);
-        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
-        if (user == null) {
-            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
-        }
-
-        if (iUserService.checkAdminValid(user).isSuccess()) {
-            //递归获取子节点
-            return iCategoryService.getDeepCategory(categoryId);
-        }
-
-        return ServerResponse.createByErrorMessage("无权限操作");
+//        String token = CookieUtil.readCookie(request);
+//        User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
+//        if (user == null) {
+//            return ServerResponse.createByErrorCodeAndMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，请先登录");
+//        }
+//
+//        if (iUserService.checkAdminValid(user).isSuccess()) {
+//            //递归获取子节点
+//            return iCategoryService.getDeepCategory(categoryId);
+//        }
+//
+//        return ServerResponse.createByErrorMessage("无权限操作");
+        //改造成通过拦截器验证用户是否登录并权限判断
+        return iCategoryService.getDeepCategory(categoryId);
     }
 }

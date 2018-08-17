@@ -23,7 +23,7 @@ public class UserManagerController {
     @Autowired
     private IUserService iUserService;
 
-    @RequestMapping(value = "login.do", method = RequestMethod.POST)
+    @RequestMapping(value = "login.do", method = RequestMethod.GET)
     @ResponseBody
     /**管理员登录
      *@param  [username, password, session]

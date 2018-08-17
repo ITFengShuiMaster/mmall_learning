@@ -22,6 +22,7 @@
     </bean>
 
     <bean id="redisHttpSessionConfiguration" class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration">
+        <!--设置键的有效期-->
         <property name="maxInactiveIntervalInSeconds" value="1800"/>
     </bean>
 
@@ -37,6 +38,13 @@
         <property name="poolConfig" ref="jedisPoolConfig"/>
         <property name="hostName" value="${redis1.ip}"/>
         <property name="port" value="${redis1.port}"/>
+    </bean>
+
+    <bean id="defaultCookieSerializer" class="org.springframework.session.web.http.DefaultCookieSerializer">
+        <property name="domainName" value="luyue.com" />
+        <property name="cookiePath" value="/" />
+        <property name="useHttpOnlyCookie" value="true" />
+        <property name="cookieMaxAge" value="365000" />
     </bean>
 
 

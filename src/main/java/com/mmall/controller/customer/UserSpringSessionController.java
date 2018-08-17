@@ -38,6 +38,10 @@ public class UserSpringSessionController {
      *@date 2018/7/30
      */
     public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse servletResponse) {
+        //测试全局异常
+        int i = 0;
+        int j = 666/i;
+
         ServerResponse<User> response = iUserService.login(username, password);
         if (response.isSuccess()) {
             //Redis的key值存储在cookie中，这样每次判断用户是否登录只需要从cookie中获取key值，在从Redis取得user就行

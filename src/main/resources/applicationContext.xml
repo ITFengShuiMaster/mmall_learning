@@ -8,7 +8,9 @@
      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!--开启注解扫描-->
-    <context:component-scan base-package="com.mmall" annotation-config="true"/>
+    <context:component-scan base-package="com.mmall" annotation-config="true">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
 
     <!--<context:annotation-config/>-->
     <!--开启AspectJ 注解方式-->
@@ -17,6 +19,5 @@
 
     <import resource="applicationContext-datasource.xml"/>
     <import resource="applicationContext-spring-session.xml"/>
-
 
 </beans>
