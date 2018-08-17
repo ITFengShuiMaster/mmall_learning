@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.io.Serializable;
 import java.util.Date;
 
 //@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -13,7 +14,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User implements Serializable{
     private Integer id;
 
     private String username;

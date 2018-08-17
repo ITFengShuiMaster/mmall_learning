@@ -39,6 +39,7 @@ public class UserController {
      */
     public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse servletResponse) {
         ServerResponse<User> response = iUserService.login(username, password);
+        //校验用户名密码
         if (response.isSuccess()) {
             //Redis的key值存储在cookie中，这样每次判断用户是否登录只需要从cookie中获取key值，在从Redis取得user就行
             CookieUtil.writeCookie(session.getId(), servletResponse);

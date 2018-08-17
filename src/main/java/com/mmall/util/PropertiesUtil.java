@@ -10,7 +10,6 @@ import java.util.Properties;
  * Created by geely
  */
 @Slf4j
-
 public class PropertiesUtil {
 
     private static Properties prop;

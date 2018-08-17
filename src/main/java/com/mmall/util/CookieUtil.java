@@ -20,6 +20,11 @@ public class CookieUtil {
     private static final String COOKIE_DOMAIN = "luyue.com";
     private static final String COOKIE_NAME = "mmall_login_token";
 
+    /**
+     * 种入cookie
+     * @param token
+     * @param response
+     */
     public static void writeCookie(String token, HttpServletResponse response) {
         Cookie cookie = new Cookie(COOKIE_NAME, token);
         cookie.setDomain(COOKIE_DOMAIN);
@@ -33,6 +38,11 @@ public class CookieUtil {
         response.addCookie(cookie);
     }
 
+    /**
+     * 获取cookie
+     * @param request
+     * @return
+     */
     public static String readCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
@@ -49,6 +59,11 @@ public class CookieUtil {
         return null;
     }
 
+    /**
+     * 删除cookie
+     * @param request
+     * @param response
+     */
     public static void delCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
 

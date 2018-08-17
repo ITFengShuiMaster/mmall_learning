@@ -11,6 +11,12 @@ import redis.clients.jedis.Jedis;
 @Slf4j
 public class JedisPoolUtil {
 
+    /**
+     * 存储键值
+     * @param key
+     * @param value
+     * @return
+     */
     public static String set(String key, String value) {
         Jedis jedis = null;
         String response = null;
@@ -28,6 +34,13 @@ public class JedisPoolUtil {
         return response;
     }
 
+    /**
+     * 存储键值，并设置有效时间
+     * @param key
+     * @param value
+     * @param exTime
+     * @return
+     */
     public static String setEx(String key, String value, int exTime) {
         Jedis jedis = null;
         String response = null;
@@ -45,6 +58,11 @@ public class JedisPoolUtil {
         return response;
     }
 
+    /**
+     * 获取value
+     * @param key
+     * @return
+     */
     public static String get(String key) {
         Jedis jedis = null;
         String response = null;
@@ -62,6 +80,12 @@ public class JedisPoolUtil {
         return response;
     }
 
+    /**
+     * 设置键的有效时间
+     * @param key
+     * @param exTime
+     * @return
+     */
     public static Long expire(String key, int exTime) {
         Jedis jedis = null;
         Long response = null;
@@ -79,6 +103,11 @@ public class JedisPoolUtil {
         return response;
     }
 
+    /**
+     * 删除键
+     * @param key
+     * @return
+     */
     public static Long del(String key) {
         Jedis jedis = null;
         Long response = null;
@@ -94,19 +123,5 @@ public class JedisPoolUtil {
 
         JedisPool.returnJedis(jedis);
         return response;
-    }
-
-    public static void main(String[] args) {
-        Jedis jedis = JedisPool.getJedis();
-
-        String res = JedisPoolUtil.set("testKeyNoEx", "1111");
-
-        res = JedisPoolUtil.get("testKeyNoEx");
-
-        res = JedisPoolUtil.setEx("testKeyEx", "22222", 60*10);
-
-        Long resEx = JedisPoolUtil.expire("testKeyNoEx", 60*2);
-
-        resEx = JedisPoolUtil.del("testKeyEx");
     }
 }
