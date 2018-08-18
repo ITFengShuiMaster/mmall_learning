@@ -37,5 +37,8 @@ public interface IOrderService {
 
     ServerResponse queryOrderStatus(Integer userId, Long orderNo);
 
+    //hour个小时后关闭订单
+    void closeOrder(int hour);
+
 
 }

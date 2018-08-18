@@ -29,6 +29,7 @@ import com.mmall.vo.OrderVo;
 import com.mmall.vo.ShippingVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -544,5 +545,30 @@ public class OrderService implements IOrderService {
         }
 
         return ServerResponse.createByError();
+    }
+
+    @Override
+    public void closeOrder(int hour) {
+        Date date = DateUtils.addHours(new Date(), -hour);
+        List<Order> orderList = orderMapper.selectStatusByCreateTime(Constants.OrderStatusEnum.NO_PAY.getStatus(), DateTimeUtil.dateToStr(date));
+        for (Order order : orderList) {
+            List<OrderItem> orderItemList = orderItemMapper.selectListByOrderNo(order.getOrderNo());
+            for (OrderItem orderItem : orderItemList) {
+                //要用主键id查询，防止锁表
+                Integer stocks = productMapper.selectStocksById(orderItem.getProductId());
+
+                if (stocks == null) {
+                    continue;
+                }
+
+                Product product = new Product();
+                product.setId(orderItem.getProductId());
+                product.setStock(stocks + orderItem.getQuantity());
+                productMapper.updateByPrimaryKeySelective(product);
+            }
+
+            orderMapper.closeOrderById(order.getId());
+            log.info("关闭订单：{}", order.getOrderNo());
+        }
     }
 }
