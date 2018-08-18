@@ -32,6 +32,7 @@ public class CloseOrderTask {
         log.info("定时关单关闭.........");
     }
 
+    @Scheduled(cron = "0 0/1 * * * ? ")
     public void closeOrderTaskV2() {
         log.info("定时关单开始.........");
         Long lockTime = Long.parseLong(PropertiesUtil.getKey("lock.time", "5000"));
