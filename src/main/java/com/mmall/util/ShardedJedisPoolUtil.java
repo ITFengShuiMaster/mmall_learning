@@ -98,6 +98,23 @@ public class ShardedJedisPoolUtil {
         return response;
     }
 
+    public static Long setNx(String key, String value) {
+        ShardedJedis jedis = null;
+        Long response = null;
+
+        try {
+            jedis = ShardJedisPool.getJedis();
+            response = jedis.setnx(key, value);
+        } catch (Exception e) {
+            log.error("set key:{}, value:{} is error:{}", key, value, e);
+            ShardJedisPool.returnBrokenJedis(jedis);
+            return response;
+        }
+
+        ShardJedisPool.returnJedis(jedis);
+        return response;
+    }
+
     public static void main(String[] args) {
         Jedis jedis = JedisPool.getJedis();
 

@@ -167,4 +167,8 @@ public class Constants {
         String RESPONSE_SUCCESS = "success";
         String RESPONSE_FAILED = "failed";
     }
+
+    public interface RedisLock {
+        String CLOSE_ORDER_LOCK_KEY = "CLOSE_ORDER_LOCK_KEY";
+    }
 }
