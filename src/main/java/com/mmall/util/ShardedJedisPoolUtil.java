@@ -106,7 +106,24 @@ public class ShardedJedisPoolUtil {
             jedis = ShardJedisPool.getJedis();
             response = jedis.setnx(key, value);
         } catch (Exception e) {
-            log.error("set key:{}, value:{} is error:{}", key, value, e);
+            log.error("setNx key:{}, value:{} is error:{}", key, value, e);
+            ShardJedisPool.returnBrokenJedis(jedis);
+            return response;
+        }
+
+        ShardJedisPool.returnJedis(jedis);
+        return response;
+    }
+
+    public static String getSet(String key, String value) {
+        ShardedJedis jedis = null;
+        String response = null;
+
+        try {
+            jedis = ShardJedisPool.getJedis();
+            response = jedis.getSet(key, value);
+        } catch (Exception e) {
+            log.error("getSet key:{}, value:{} is error:{}", key, value, e);
             ShardJedisPool.returnBrokenJedis(jedis);
             return response;
         }
