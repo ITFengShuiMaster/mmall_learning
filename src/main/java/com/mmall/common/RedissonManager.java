@@ -30,6 +30,7 @@ public class RedissonManager {
      */
     private void init() {
         try {
+            // address 格式：host:port
             config.useSingleServer().setAddress(new StringBuilder().append(ip1).append(":").append(port1).toString());
             redisson = (Redisson) Redisson.create(config);
             log.info("初始化Redisson完成..........");
