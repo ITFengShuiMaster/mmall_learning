@@ -4,7 +4,7 @@ import com.mmall.common.JedisPool;
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 
-/**
+/** 单机redis连接池
  * @author Luyue
  * @date 2018/8/11 14:29
  **/

@@ -20,8 +20,14 @@ public class RedissonManager {
 
     private static String ip1 = PropertiesUtil.getKey("redis1.ip");
     private static Integer port1 = Integer.parseInt(PropertiesUtil.getKey("redis1.port", "6379"));
-
+    
     @PostConstruct
+    /** 初始化Redisson
+     *@param  []
+     *@return  void
+     *@author  卢越
+     *@date  2018/8/19
+     */
     private void init() {
         try {
             config.useSingleServer().setAddress(new StringBuilder().append(ip1).append(":").append(port1).toString());

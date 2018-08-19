@@ -11,7 +11,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-/**
+/** 重置session状态
  * @author Luyue
  * @date 2018/8/13 12:15
  **/
@@ -22,6 +22,12 @@ public class SessionExFilter implements Filter {
     }
 
     @Override
+    /** 用户登录之后，每一次的访问都重置token的有效期
+     *@param  [servletRequest, servletResponse, filterChain]
+     *@return  void
+     *@author  卢越
+     *@date  2018/8/19
+     */
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String token = CookieUtil.readCookie(request);

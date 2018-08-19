@@ -14,7 +14,7 @@ import org.codehaus.jackson.type.TypeReference;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-/**
+/** 高复用Jackson序列化和反序列化
  * @author Luyue
  * @date 2018/8/11 15:58
  **/

@@ -2,7 +2,7 @@ package com.mmall.util;
 
 import java.math.BigDecimal;
 
-/**
+/** 大金额的处理工具类，防止精度丢失
  * @author Luyue
  * @date 2018/8/2 14:06
  **/

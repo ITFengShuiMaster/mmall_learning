@@ -9,7 +9,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
-/**
+/** FTP 文件上传工具类
  * @author Luyue
  * @date 2018/8/1 12:44
  **/

@@ -10,7 +10,7 @@ import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
+/** springMVC 全局异常处理
  * @author Luyue
  * @date 2018/8/17 14:53
  **/
@@ -18,6 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class ExceptionResolvor implements HandlerExceptionResolver {
     @Override
+    /** 全局异常处理，让后台程序运行过程中的错误信息不用暴露到前台
+     *@param  [httpServletRequest, httpServletResponse, o, e]
+     *@return  org.springframework.web.servlet.ModelAndView
+     *@author  卢越
+     *@date  2018/8/19
+     */
     public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) {
         log.error("{} is error", httpServletRequest.getRequestURI(), e);
         ModelAndView modelAndView = new ModelAndView(new MappingJacksonJsonView());

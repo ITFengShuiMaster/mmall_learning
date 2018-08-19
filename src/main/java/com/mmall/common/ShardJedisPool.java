@@ -11,7 +11,7 @@ import redis.clients.util.Sharded;
 
 import java.util.List;
 
-/**
+/** 分布式jedis连接池
  * @author Luyue
  * @date 2018/8/14 9:29
  **/
@@ -31,6 +31,9 @@ public class ShardJedisPool {
     private static Boolean testOnBorrow = Boolean.parseBoolean(PropertiesUtil.getKey("redis.test.borrow", "true"));
     private static Boolean testOnReturn = Boolean.parseBoolean(PropertiesUtil.getKey("redis.test.return", "true"));
 
+    /**
+     * 初始化分布式连接池
+     */
     private static void initPool() {
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
 

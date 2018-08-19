@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.ShardedJedis;
 
-/**
+/** 分布式redisAPI工具类
  * @author Luyue
  * @date 2018/8/11 14:29
  **/

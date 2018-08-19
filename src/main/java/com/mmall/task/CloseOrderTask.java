@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
-/**
+/** 定时任务（关闭未支付的订单）
  * @author Luyue
  * @date 2018/8/18 14:40
  **/
@@ -31,6 +31,9 @@ public class CloseOrderTask {
         this.redissonManager = redissonManager;
     }
 
+    /**
+     * 无分布式锁
+     */
 //    @Scheduled(cron = "0 0/1 * * * ? ")
     public void closeOrderTaskV1() {
         log.info("定时关单开始.........");
@@ -39,6 +42,9 @@ public class CloseOrderTask {
         log.info("定时关单关闭.........");
     }
 
+    /**
+     * 初代分布式锁
+     */
 //    @Scheduled(cron = "0 0/1 * * * ? ")
     public void closeOrderTaskV2() {
         log.info("定时关单开始.........");
@@ -54,6 +60,9 @@ public class CloseOrderTask {
         log.info("定时关单关闭.........");
     }
 
+    /**
+     * 演进分布式锁，防死锁
+     */
 //    @Scheduled(cron = "0 0/1 * * * ? ")
     public void closeOrderTaskV3() {
         log.info("定时关单开始.........");
@@ -81,6 +90,9 @@ public class CloseOrderTask {
         log.info("定时关单关闭.........");
     }
 
+    /**
+     * redisson 构建分布式锁
+     */
     @Scheduled(cron = "0 0/1 * * * ? ")
     public void closeOrderTaskV4() {
         RLock lock = redissonManager.getRedisson().getLock(Constants.RedisLock.CLOSE_ORDER_LOCK_KEY);
@@ -106,6 +118,10 @@ public class CloseOrderTask {
         }
     }
 
+    /**
+     * 定时任务所要执行的业务
+     * @param lockName
+     */
     private void closeOrder(String lockName) {
         log.info("获取{}, ThreadName:{}", lockName, Thread.currentThread().getName());
         //设置有效期，防止死锁

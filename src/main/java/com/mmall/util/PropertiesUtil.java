@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
-/**
+/** 配置文件属性获取工具类
  * Created by geely
  */
 @Slf4j

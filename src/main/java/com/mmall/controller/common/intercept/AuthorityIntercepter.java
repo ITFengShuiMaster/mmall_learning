@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
 import java.util.Map;
 
-/**
+/** 管理员认证拦截器
  * @author Luyue
  * @date 2018/8/17 15:23
  **/
@@ -36,6 +36,7 @@ public class AuthorityIntercepter implements HandlerInterceptor {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(Constants.CURRENT_USER);
         if (user == null || user.getRole().intValue() != Constants.ROLE.ROLE_ADMIN) {
+            //将具体错误信息通过printWriter 返回给前端
             response.reset();
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json;charset=UTF-8");
@@ -43,6 +44,7 @@ public class AuthorityIntercepter implements HandlerInterceptor {
             PrintWriter pw = response.getWriter();
 
             if (user == null) {
+                // 富文本的格式
                 if ("richTextImgUpload".equals(methodName)) {
                     Map<String, Object> map = Maps.newHashMap();
                     map.put("success", false);

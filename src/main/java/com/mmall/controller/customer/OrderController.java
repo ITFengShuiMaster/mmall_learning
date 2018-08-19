@@ -116,6 +116,12 @@ public class OrderController {
 
     @RequestMapping("list.do")
     @ResponseBody
+    /** 订单列表分页
+     *@param  [current, size, request]
+     *@return  com.mmall.common.ServerResponse<com.github.pagehelper.PageInfo>
+     *@author  卢越
+     *@date  2018/8/19
+     */
     public ServerResponse<PageInfo> list(@RequestParam(value = "current", defaultValue = "1") Integer current, @RequestParam(value = "size", defaultValue = "10") Integer size, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
         User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
@@ -129,6 +135,12 @@ public class OrderController {
 
     @RequestMapping(value = "pay.do", method = RequestMethod.POST)
     @ResponseBody
+    /** 支付模块
+     *@param  [orderNo, request]
+     *@return  com.mmall.common.ServerResponse
+     *@author  卢越
+     *@date  2018/8/19
+     */
     public ServerResponse pay(Long orderNo, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
         User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
@@ -142,6 +154,12 @@ public class OrderController {
 
     @RequestMapping(value = "ali_pay_call_back.do", method = RequestMethod.POST)
     @ResponseBody
+    /** 支付宝支付回调
+     *@param  [request]
+     *@return  java.lang.Object
+     *@author  卢越
+     *@date  2018/8/19
+     */
     public Object alipayCallBack(HttpServletRequest request) {
         Map<String, String> params = Maps.newHashMap();
 
@@ -180,6 +198,12 @@ public class OrderController {
 
     @RequestMapping(value = "query_order_pay_status.do", method = RequestMethod.POST)
     @ResponseBody
+    /** 返回是否支付成功
+     *@param  [orderNo, request]
+     *@return  com.mmall.common.ServerResponse<java.lang.Boolean>
+     *@author  卢越
+     *@date  2018/8/19
+     */
     public ServerResponse<Boolean> queryOrderPayStatus(Long orderNo, HttpServletRequest request) {
         String token = CookieUtil.readCookie(request);
         User user = JsonUtil.json2Object(ShardedJedisPoolUtil.get(token), User.class);
